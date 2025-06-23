@@ -11,10 +11,12 @@ City Bites offers a modern platform where users can explore food menus, place or
 The system includes separate modules for **customer**, **supplier**, and **admin** operations, ensuring clear separation of responsibilities and role-based access.
 
 ---
+## 📽️ Demo Video
 
-**🎬 Demo Video:** [▶️ citybites.mp4](./citybites.mp4)
+🎬 **Watch Demo Video:**  
+[▶️ Click here to watch City Bites Demo on Google Drive](https://drive.google.com/file/d/1OHdTHyGXmeufbg2cjez2_zxZQ6vHhU74/view?usp=sharing)
 
-> This video demonstrates the complete order lifecycle — user registration, food selection, cart management, payment, and delivery coordination.
+> This video demonstrates the complete order lifecycle — including user registration, food selection, cart management, payment, and delivery coordination.
 
 ---
 
