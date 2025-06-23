@@ -1,0 +1,77 @@
+DROP TABLE Product CASCADE CONSTRAINTS;
+--------------------------------------
+-----CREATE A Product TABLE----
+
+SET SERVEROUTPUT ON;
+DECLARE
+    product_table VARCHAR2(2000);
+BEGIN
+    product_table := 'CREATE TABLE Product
+                (product_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                description VARCHAR2(50),
+                per_price NUMBER,
+                quantity NUMBER,
+                sup_id NUMBER,
+                remaining NUMBER)';
+                
+    EXECUTE IMMEDIATE product_table;
+
+END;
+
+select * from product;
+------create a procedure to add new product---
+DROP procedure add_product;
+CREATE procedure add_product(p_description IN VARCHAR2, p_per_price IN NUMBER, p_quantity IN NUMBER, p_sup_id IN NUMBER,p_remaining IN NUMBER,product_id OUT NUMBER) AS
+BEGIN 
+    INSERT INTO product (description, per_price, quantity, sup_id,remaining)
+    VALUES(p_description,p_per_price,p_quantity,p_sup_id,p_remaining   )
+     RETURNING product_id INTO product_id;
+    
+END;
+
+------create a procedure to update product---
+DROP procedure update_product
+CREATE procedure update_product(p_product_id IN NUMBER,p_description IN VARCHAR2, p_per_price IN NUMBER, p_quantity IN NUMBER, p_sup_id IN NUMBER ,p_remaining IN NUMBER)AS
+BEGIN
+    UPDATE product SET
+    description = p_description,
+    per_price = p_per_price,
+    quantity = p_quantity,
+    sup_id = p_sup_id,
+    remaining = p_remaining   
+    WHERE
+    product_id = p_product_id;
+    
+END;
+
+-----create a  procedure to delete product--
+DROP PROCEDURE delete_product;
+CREATE procedure delete_product(p_product_id IN NUMBER)AS
+BEGIN
+    DELETE FROM product
+    WHERE product_id = p_product_id;
+END;
+
+-----create a procedure to get all the product list--
+DROP PROCEDURE get_all_products;
+CREATE procedure get_all_products(p_results OUT SYS_REFCURSOR)AS
+BEGIN
+    OPEN p_results FOR SELECT product_id, description, per_price,quantity,sup_id,remaining FROM product;
+END;
+
+----create a procedure to get products by id---
+DROP PROCEDURE get_product_by_id;
+CREATE PROCEDURE get_product_by_id(p_product_id IN NUMBER,p_description OUT VARCHAR2, p_per_price OUT NUMBER, p_quantity OUT NUMBER, p_sup_id OUT NUMBER,p_remaining OUT NUMBER)AS
+BEGIN
+    SELECT  per_price, quantity,sup_id,description,remaining INTO  p_per_price,p_quantity,p_sup_id,p_description,p_remaining
+    FROM product
+    WHERE product_id = p_product_id;
+END;
+
+SELECT column_name, identity_column
+FROM all_tab_columns
+WHERE table_name = 'PRODUCT' AND column_name = 'PRODUCT_ID';
+
+
+
+

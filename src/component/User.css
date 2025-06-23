@@ -1,0 +1,101 @@
+/* Reset Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background: linear-gradient(135deg, rgba(11, 12, 12, 0.6),rgba(13, 53, 10, 0.7), rgba(11, 12, 12, 0.6), rgba(5, 63, 6, 0.7), rgba(11, 12, 12, 0.6));
+}
+
+/* Full-screen container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Login Box */
+.login-box {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 65vh;
+    border-radius: 15px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    background: white;
+}
+
+/* Left Side - Login Form */
+.login-form {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    color: #0c0101;
+}
+
+.login-title {
+    text-align: center;
+    color: #0c0101;
+    font-size: 28px;
+}
+
+/* Right Side - Image (Coming from JSX) */
+.login-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Button */
+.login-btn {
+    background-color: #1976d2;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Links */
+.signup-forgot {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.clickable {
+    color: #1976d2;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.clickable:hover {
+    color: #0d47a1;
+}
+
+/* Messages */
+.success-message {
+    color: green;
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+}

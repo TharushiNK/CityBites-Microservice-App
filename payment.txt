@@ -1,0 +1,118 @@
+DROP TABLE Payments CASCADE CONSTRAINTS;
+--------------------------------------------
+
+SET SERVEROUTPUT ON;
+DECLARE
+    payment_table VARCHAR2(2000);
+BEGIN
+    payment_table := 'CREATE TABLE PAYMENTS
+                       (pay_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                        order_id NUMBER,
+                        user_id NUMBER,
+                        amount NUMBER,
+                        paid_date DATE)';
+                
+    EXECUTE IMMEDIATE payment_table;
+END;
+
+
+------create procedure to add payment----
+DROP PROCEDURE add_payment;
+CREATE PROCEDURE add_payment(
+    p_order_id IN NUMBER,
+    p_user_id IN NUMBER,
+    p_amount IN NUMBER,
+    p_paid_date IN DATE,
+    pay_id OUT NUMBER
+) AS
+BEGIN 
+    INSERT INTO PAYMENTS (order_id, user_id, amount, paid_date)
+    VALUES (p_order_id, p_user_id, p_amount, p_paid_date)
+    RETURNING pay_id INTO pay_id;
+END;
+
+----create procedure to update payment---
+
+CREATE PROCEDURE update_payment(
+    p_pay_id IN NUMBER,
+    p_order_id IN NUMBER,
+    p_user_id IN NUMBER,
+    p_amount IN NUMBER,
+    p_paid_date IN DATE
+) AS
+BEGIN
+    UPDATE PAYMENTS 
+    SET order_id = p_order_id,
+        user_id = p_user_id,
+        amount = p_amount,
+        paid_date = p_paid_date
+    WHERE pay_id = p_pay_id;
+END;
+
+-----create a procedure to delete payment----
+
+CREATE PROCEDURE delete_payment(
+    p_pay_id IN NUMBER
+) AS
+BEGIN
+    DELETE FROM PAYMENTS
+    WHERE pay_id = p_pay_id;
+END;
+
+---create a procedure to get all payment details
+
+CREATE PROCEDURE get_all_payments(
+    p_results OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_results FOR 
+    SELECT pay_id, order_id, user_id, amount, paid_date
+    FROM PAYMENTS;
+END;
+
+----create a procedure to get payment details by id---
+
+CREATE PROCEDURE get_payment_by_id(
+    p_pay_id IN NUMBER,
+    p_order_id OUT NUMBER,
+    p_user_id OUT NUMBER,
+    p_amount OUT NUMBER,
+    p_paid_date OUT DATE
+) AS
+BEGIN
+    SELECT order_id, user_id, amount, paid_date
+    INTO p_order_id, p_user_id, p_amount, p_paid_date
+    FROM PAYMENTS
+    WHERE pay_id = p_pay_id;
+END;
+
+-----create a table to save payment history before deletion---
+
+CREATE TABLE payment_audit_log (
+    log_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    pay_id NUMBER,
+    order_id NUMBER,
+    user_id NUMBER,
+    amount NUMBER,
+    paid_date DATE
+);
+
+CREATE OR REPLACE TRIGGER payment_auditing_trg
+BEFORE DELETE ON PAYMENTS
+FOR EACH ROW
+BEGIN
+    INSERT INTO payment_audit_log (pay_id, order_id, user_id, amount, paid_date)
+    VALUES (:OLD.pay_id, :OLD.order_id, :OLD.user_id, :OLD.amount, :OLD.paid_date);
+END;
+
+------create a procdure to get the paymnets by user_id---
+CREATE OR REPLACE PROCEDURE get_payments_by_user_id(
+    p_user_id IN NUMBER,
+    p_result OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_result FOR 
+        SELECT pay_id, order_id, user_id, amount, paid_date
+        FROM PAYMENTS
+        WHERE user_id = p_user_id;
+END;
